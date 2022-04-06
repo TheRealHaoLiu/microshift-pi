@@ -1,0 +1,46 @@
+---
+- name: Create $HOME/bin directory
+  file:
+    path: /home/pi/bin
+    owner: pi
+    group: pi
+    state: directory
+- name: Modify .zshrc to configure PATH
+  lineinfile: 
+    dest: /home/pi/.zshrc
+    search_string: "# export PATH=$HOME/bin:/usr/local/bin:$PATH" 
+    line: "export PATH=$HOME/bin:/usr/local/bin:$PATH" 
+    state: present
+- name: Download openshift-client from mirror.openshift.com
+  get_url:
+    url: https://mirror.openshift.com/pub/openshift-v4/aarch64/clients/ocp/stable/openshift-client-linux.tar.gz
+    dest: /home/pi/Downloads/openshift-client-linux.tar.gz
+- name: Create $HOME/Downloads/openshift-client-linux
+  file:
+    path: /home/pi/Downloads/openshift-client-linux
+    owner: pi
+    group: pi
+    state: directory
+- name: Extract openshift-client-linux.tar.gz into /home/pi/Downloads/openshift-client-linux
+  unarchive:
+    src: /home/pi/Downloads/openshift-client-linux.tar.gz
+    dest: /home/pi/Downloads/openshift-client-linux
+    remote_src: yes
+    owner: pi
+    group: pi
+- name: Create a symbolic link for oc in $HOME/bin
+  file:
+    src: /home/pi/Downloads/openshift-client-linux/oc
+    dest: /home/pi/bin/oc
+    owner: pi
+    group: pi
+    state: link
+- name: Create a symbolic link for kubectl in $HOME/bin
+  file:
+    src: /home/pi/Downloads/openshift-client-linux/kubectl
+    dest: /home/pi/bin/kubectl
+    owner: pi
+    group: pi
+    state: link
+
+

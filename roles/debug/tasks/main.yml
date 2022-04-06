@@ -1,0 +1,4 @@
+- name: debug
+  become: true
+  debug:
+    msg: "home {{ ansible_env.HOME }} instance_owner {{ ansible_env.USER }}"

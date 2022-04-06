@@ -1,0 +1,39 @@
+---
+- name: Configure my pi
+  hosts: all
+  remote_user: pi
+  become: yes
+  become_method: sudo
+
+  roles:
+    - boot_config
+    - user_config
+    - apt
+    - role: gantsign.oh-my-zsh
+      users:
+        - username: pi
+          oh_my_zsh:
+            theme: robbyrussell
+            plugins:
+              - git
+              - kubectl
+              - oc
+              - pyenv
+              - python
+    - role: avanov.pyenv
+      pyenv_path: "/home/pi/.pyenv"
+      pyenv_owner: "pi"
+      pyenv_global: "3.9.10"
+      pyenv_update_git_install: yes
+      pyenv_enable_autocompletion: no
+      pyenv_python_versions:
+        - "3.9.10"
+        - "2.7.18"
+      pyenv_setting_path: "/home/pi/.zshrc"
+      pyenv_virtualenvs: []
+    - other
+    # - debug
+
+# ---
+# - name: Configure my /etc/hosts
+
